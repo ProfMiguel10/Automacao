@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Automação Web Interativa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    h2 {
+      margin-top: 30px;
+      color: #444;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .resultado {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    .aprovado {
+      background: #d4edda;
+      color: #155724;
+    }
+    .reprovado {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .info {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Aplicação Web</h1>
+  <!-- EXEMPLO 1 -->
+  <h2>Exemplo 1️⃣ - Pedido </h2>
+  <label>Valor do pedido (R$)</label>
+  <input type="number" id="valorPedido" />
+  <label>Cliente ativo?</label>
+  <select id="clienteAtivo">
+    <option value="S">Sim</option>
+    <option value="N">Não</option>
+  </select>
+  <button onclick="avaliarPedido()">Avaliar Pedido</button>
+  <div id="resultadoPedido" class="resultado"></div>
+  <!-- EXEMPLO 2 -->
+  <h2>Exemplo 2️⃣ - Temperatura</h2>
+  <label>Temperatura atual (°C)</label>
+  <input type="number" id="temperatura" />
+  <button onclick="verificarTemperatura()">Verificar Temperatura</button>
+  <div id="resultadoTemperatura" class="resultado"></div>
+  <!-- EXEMPLO 3 -->
+  <h2>Exemplo 3️⃣ -Rotina</h2>
+  <button onclick="executarRotina()">Executar Rotina Automática</button>
+
+  <div id="resultadoRotina" class="resultado info"></div>
+</div>
+
+<script>
+  // EXEMPLO 1
+  function avaliarPedido() {
+    const valor = parseFloat(document.getElementById('valorPedido').value);
+    const ativo = document.getElementById('clienteAtivo').value;
+    const resultado = document.getElementById('resultadoPedido');
+
+    if (ativo === 'S' && valor <= 2000) {
+      resultado.className = 'resultado aprovado';
+      resultado.innerText = 'Pedido aprovado automaticamente.';
+    } else {
+      resultado.className = 'resultado reprovado';
+      resultado.innerText = 'Pedido rejeitado automaticamente.';
+    }
+  }
+  // EXEMPLO 2
+  function verificarTemperatura() {
+    const temp = parseInt(document.getElementById('temperatura').value);
+    const resultado = document.getElementById('resultadoTemperatura');
+    if (temp > 40) {
+      resultado.className = 'resultado reprovado';
+      resultado.innerText = 'Temperatura alta! Ar-condicionado ligado automaticamente.';
+    } else {
+      resultado.className = 'resultado aprovado';
+      resultado.innerText = 'Temperatura adequada. Nenhuma ação necessária.';
+    }
+  }
+  // EXEMPLO 3
+  function executarRotina() {
+    const resultado = document.getElementById('resultadoRotina');
+    resultado.innerHTML = 'Relatório gerado automaticamente.<br>Notificação enviada automaticamente.<br>Rotina finalizada com sucesso.';
+  }
+</script>
+</body>
+</html>
