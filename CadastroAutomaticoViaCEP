@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro com ViaCEP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cadastro</h1>
+
+    <label>CEP</label>
+    <input type="text" id="cep" placeholder="Digite o CEP" onblur="buscarCEP()">
+
+    <label>Logradouro</label>
+    <input type="text" id="logradouro">
+
+    <label>Bairro</label>
+    <input type="text" id="bairro">
+
+    <label>Cidade</label>
+    <input type="text" id="cidade">
+
+    <label>UF</label>
+    <input type="text" id="uf">
+
+    <button>Cadastrar</button>
+</div>
+
+<script>
+    function buscarCEP() {
+        const cep = document.getElementById("cep").value.replace(/\D/g, "");
+
+        if (cep.length !== 8) {
+            alert("CEP inválido. Digite 8 números.");
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(dados => {
+                if (dados.erro) {
+                    alert("CEP não encontrado.");
+                } else {
+                    document.getElementById("logradouro").value = dados.logradouro;
+                    document.getElementById("bairro").value = dados.bairro;
+                    document.getElementById("cidade").value = dados.localidade;
+                    document.getElementById("uf").value = dados.uf;
+                }
+            })
+            .catch(() => {
+                alert("Erro ao consultar o web service.");
+            });
+    }
+</script>
+
+</body>
+</html>
