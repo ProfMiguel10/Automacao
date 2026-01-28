@@ -1,0 +1,28 @@
+import java.util.Scanner;
+public class SistemaDecisao {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("=== DINHEIRO ===");
+		System.out.print("Informe o valor do pedido: R$ ");
+		double valorPedido = sc.nextDouble();
+		System.out.print("O cliente está ativo? (S/N): ");
+		char resposta = sc.next().toUpperCase().charAt(0);
+		boolean clienteAtivo = (resposta == 'S');
+		System.out.println("\nProcessando decisão automaticamente...\n");
+		if (clienteAtivo && valorPedido <= 2000) {
+			aprovarPedido();
+		} else {
+			rejeitarPedido();
+		}
+		sc.close();
+	}
+
+	private static void aprovarPedido() {
+		System.out.println("Pedido aprovado automaticamente.");
+	}
+
+	private static void rejeitarPedido() {
+		System.out.println("Pedido rejeitado automaticamente.");
+	}
+}
