@@ -1,0 +1,22 @@
+import java.util.Scanner;
+
+public class Automacao {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("=== AUTOMAÇÃO DE DECISÃO ===");
+		System.out.print("Informe o valor do pedido: R$ ");
+		double valorPedido = scanner.nextDouble();
+		System.out.print("O cliente está ativo? (S/N): ");
+		char ativo = scanner.next().toUpperCase().charAt(0);
+		System.out.print("Informe o score do cliente (0 a 1000): ");
+		int score = scanner.nextInt();
+		System.out.println("\nProcessando decisão automaticamente...\n");
+		if (ativo == 'S' && valorPedido <= 5000 && score >= 600) {
+			System.out.println("Pedido APROVADO automaticamente.");
+		} else {
+			System.out.println("Pedido REPROVADO automaticamente.");
+		}
+		scanner.close();
+	}
+}
