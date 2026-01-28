@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Temperatura {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("=== TEMPERATURA ===");
+		System.out.print("Informe a temperatura atual (°C): ");
+		int temperaturaAtual = sc.nextInt();
+		System.out.println("\nTemperatura atual: " + temperaturaAtual + "°C\n");
+		verificarTemperatura(temperaturaAtual);
+		sc.close();
+	}
+
+	public static void verificarTemperatura(int temperatura) {
+		if (temperatura > 40) {
+			System.out.println("Temperatura alta!");
+			System.out.println("Ar-condicionado ligado automaticamente.");
+		} else {
+			System.out.println("Temperatura adequada.");
+			System.out.println("Nenhuma ação necessária.");
+		}
+	}
+}
