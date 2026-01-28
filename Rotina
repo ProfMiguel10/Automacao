@@ -1,0 +1,23 @@
+public class Rotina {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("=== ROTINA ===");
+		System.out.print("Deseja iniciar a rotina automática? (S/N): ");
+		char opcao = sc.next().toUpperCase().charAt(0);
+		if (opcao == 'S') {
+			System.out.println("\nIniciando rotina automática...\n");
+			gerarRelatorio();
+			enviarNotificacao();
+			System.out.println("\nRotina finalizada com sucesso.");
+		} else {
+			System.out.println("\nRotina cancelada pelo usuário.");
+		}
+		sc.close();
+	}
+	public static void gerarRelatorio() {
+		System.out.println("Relatório gerado automaticamente.");
+	}
+	public static void enviarNotificacao() {
+		System.out.println("Notificação enviada automaticamente.");
+	}
+}
