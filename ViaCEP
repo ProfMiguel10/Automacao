@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Service - ViaCEP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e2e3e5;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ViaCEP</h1>
+    <label>Digite o CEP:</label>
+    <input type="text" id="cep" placeholder="Ex: 00000000">
+    <button onclick="buscarCEP()">Buscar Endereço</button>
+    <div id="resultado" class="resultado"></div>
+</div>
+<script>
+    function buscarCEP() {
+        const cep = document.getElementById("cep").value.replace(/\D/g, "");
+        const resultado = document.getElementById("resultado");
+
+        if (cep.length !== 8) {
+            resultado.innerText = "CEP inválido. Digite 8 números.";
+            return;
+        }
+
+        resultado.innerText = "Consultando web service automaticamente...";
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(dados => {
+                if (dados.erro) {
+                    resultado.innerText = "CEP não encontrado.";
+                } else {
+                    resultado.innerHTML = `
+                        <strong>Endereço encontrado automaticamente:</strong><br><br>
+                        Logradouro: ${dados.logradouro}<br>
+                        Bairro: ${dados.bairro}<br>
+                        Cidade: ${dados.localidade}<br>
+                        UF: ${dados.uf}
+                    `;
+                }
+            })
+            .catch(() => {
+                resultado.innerText = "Erro ao acessar o web service.";
+            });
+    }
+</script>
+</body>
+</html>
