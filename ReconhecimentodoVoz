@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Comandos por Voz</title>
+</head>
+<body>
+<h2>Comando de Voz</h2>
+<p>Diga: "alerta", "luz", "google" ou "sair"</p>
+<button id="startBtn">Ativar Comando de Voz</button>
+<p id="status"></p>
+<script>
+const status = document.getElementById("status");
+const startBtn = document.getElementById("startBtn");
+// Verifica se o navegador suporta a API
+if (!('webkitSpeechRecognition' in window)) {
+    status.innerText = "Seu navegador não suporta reconhecimento de voz.";
+} else {
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "pt-BR";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.onstart = () => {
+        status.innerText = "Ouvindo comandos...";
+    };
+    recognition.onresult = (event) => {
+        const resultado = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+        status.innerText = `Comando reconhecido: ${resultado}`;
+        switch(resultado) {
+            case "alerta.":
+                alert("Alerta ativado!");
+                break;
+            case "luz.":
+                alert("Luzes.");
+                break;
+            case "google.":
+                window.open("https://www.google.com", "_blank");
+                break;
+            case "sair":
+                recognition.stop();
+                alert("Encerrado.");
+                break;
+            default:
+                alert("Comando não reconhecido. Tente novamente.");
+        }
+    };
+    recognition.onerror = (event) => {
+        console.error("Erro no reconhecimento:", event.error);
+    };
+    startBtn.onclick = () => recognition.start();
+}
+</script>
+</body>
+</html>
