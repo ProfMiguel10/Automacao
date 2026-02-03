@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>RPA Kanban</title>
+<style>
+body { font-family: Arial; margin: 30px; }
+input, button { margin: 5px 0; padding: 5px; }
+ul { margin-top: 20px; padding-left: 20px; }
+li { margin: 5px 0; }
+.feito { color: green; text-decoration: line-through; }
+</style>
+</head>
+<body>
+
+<h2>Adicionar Tarefa</h2>
+<label>Tarefa: </label><input type="text" id="tarefa"><br>
+<button id="addTarefa">Adicionar Tarefa</button>
+<button id="rodarRPA">Rodar RPA</button>
+
+<h2>Quadro de Tarefas</h2>
+<ul id="quadro"></ul>
+
+<script>
+// Botão "Adicionar Tarefa"
+document.querySelector("#addTarefa").addEventListener("click", () => {
+  const valor = document.querySelector("#tarefa").value;
+  if(valor){
+    const quadro = document.querySelector("#quadro");
+    const item = document.createElement("li");
+    item.innerText = valor;
+    quadro.appendChild(item);
+    document.querySelector("#tarefa").value = "";
+    console.log(`Tarefa "${valor}" adicionada`);
+  } else alert("Digite uma tarefa!");
+});
+
+// ==== RPA Funcional para Kanban ====
+document.querySelector("#rodarRPA").addEventListener("click", () => {
+  const tarefas = [
+    "Enviar relatório diário",
+    "Responder e-mails pendentes",
+    "Atualizar planilha de projetos"
+  ];
+
+  let index = 0;
+
+  function esperarElemento(seletor, callback){
+    const el = document.querySelector(seletor);
+    if(el) callback(el);
+    else setTimeout(() => esperarElemento(seletor, callback), 100);
+  }
+
+  function inserirProximo(){
+    if(index >= tarefas.length){
+      // Marcar todas as tarefas como feitas
+      document.querySelectorAll("#quadro li").forEach(item => item.classList.add("feito"));
+
+      // Mostrar resumo no console
+      const resumo = [];
+      document.querySelectorAll("#quadro li").forEach(item => resumo.push(item.innerText));
+      console.table(resumo);
+      alert("RPA Kanban finalizado! Confira o console.");
+      return;
+    }
+
+    const tarefa = tarefas[index];
+
+    esperarElemento("#tarefa", (input) => {
+      input.value = tarefa;
+      esperarElemento("#addTarefa", (botao) => {
+        botao.click();
+        console.log(`Tarefa "${tarefa}" adicionada pelo RPA`);
+        index++;
+        setTimeout(inserirProximo, 500);
+      });
+    });
+  }
+
+  inserirProximo();
+});
+</script>
+
+</body>
+</html>
