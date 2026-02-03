@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>RPA Calculadora de Médias via Excel</title>
+<style>
+body { font-family: Arial; margin: 30px; }
+input, button { margin: 5px 0; padding: 5px; width: 150px; }
+table { border-collapse: collapse; width: 60%; margin-top: 20px; }
+th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+.resultado { margin-top: 20px; font-weight: bold; font-size: 1.2em; }
+</style>
+</head>
+<body>
+<h2>RPA - Calculadora de Médias via Excel/CSV</h2>
+<label>Escolha arquivo Excel/CSV: </label>
+<input type="file" id="arquivo" accept=".csv, .xlsx" /><br>
+<button id="rodarRPA">Rodar RPA</button>
+<table id="tabela">
+<tr><th>Aluno</th><th>Nota 1</th><th>Nota 2</th><th>Média</th></tr>
+</table>
+<div class="resultado" id="resumo"></div>
+<!-- Biblioteca XLSX para ler Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+document.querySelector("#rodarRPA").addEventListener("click", () => {
+  const fileInput = document.querySelector("#arquivo");
+  const file = fileInput.files[0];
+  if(!file){ alert("Selecione um arquivo Excel ou CSV!"); return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    let dados = [];
+    // Detecta CSV ou XLSX
+    if(file.name.endsWith(".csv")){
+      const text = e.target.result;
+      const linhas = text.split("\n").filter(l => l.trim() !== "");
+      dados = linhas.map(linha => {
+        const [aluno, nota1, nota2] = linha.split(",");
+        return {aluno: aluno.trim(), nota1: parseFloat(nota1), nota2: parseFloat(nota2)};
+      });
+    } else {
+      // XLSX
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, {type: 'array'});
+      const primeiraPlanilha = workbook.Sheets[workbook.SheetNames[0]];
+      dados = XLSX.utils.sheet_to_json(primeiraPlanilha, {header:["aluno","nota1","nota2"], range:1});
+      dados = dados.map(d => ({aluno: d.aluno, nota1: parseFloat(d.nota1), nota2: parseFloat(d.nota2)}));
+    }
+    // RPA: inserir na tabela e calcular média
+    const tabela = document.querySelector("#tabela");
+    let somaTotal = 0;
+    let count = 0;
+    dados.forEach(dado => {
+      const linha = tabela.insertRow();
+      linha.insertCell(0).innerText = dado.aluno;
+      linha.insertCell(1).innerText = dado.nota1.toFixed(2);
+      linha.insertCell(2).innerText = dado.nota2.toFixed(2);
+      const media = ((dado.nota1 + dado.nota2)/2).toFixed(2);
+      linha.insertCell(3).innerText = media;
+      somaTotal += parseFloat(media);
+      count++;
+      console.log(`Aluno ${dado.aluno} processado pelo RPA com média ${media}`);
+    });
+
+    const mediaGeral = (somaTotal/count).toFixed(2);
+    document.querySelector("#resumo").innerText = `Média Geral: ${mediaGeral}`;
+    console.log(`Média Geral calculada pelo RPA: ${mediaGeral}`);
+    alert("RPA finalizado! Confira a tabela e o console.");
+  };
+
+  // Leitura dependendo do tipo de arquivo
+  if(file.name.endsWith(".csv")) reader.readAsText(file);
+  else reader.readAsArrayBuffer(file);
+});
+</script>
+</body>
+</html>
